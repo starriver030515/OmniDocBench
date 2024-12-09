@@ -1,4 +1,4 @@
-![](https://github.com/user-attachments/assets/e59519f1-c5db-43b0-9cf8-c5981bc4c8d6)
+![](https://github.com/user-attachments/assets/f705bf54-5dd2-42ba-af2d-40a0a174b0b0)
 
 <h1 align="center">
 OmniDocBench
