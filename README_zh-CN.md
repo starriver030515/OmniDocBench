@@ -1426,10 +1426,13 @@ PDF来源从网络公开渠道收集以及社群用户贡献，已剔除了不�
 ## 引用
 
 ```bibtex
-@misc{ouyang2024omnidocbench,
-  title={OmniDocBench: Benchmarking Diverse PDF Document Parsing with Comprehensive Annotations},
-  author={Linke Ouyang and Yuan Qu and Hongbin Zhou and Jiawei Zhu and Rui Zhang and Qunshu Lin and Bin Wang and Zhiyuan Zhao and Man Jiang and Xiaomeng Zhao and Jin Shi and Fan Wu and Pei Chu and Minghao Liu and Zhenxiang Li and Chao Xu and Bo Zhang and Botian Shi and Zhongying Tu and Conghui He},
-  year={2024},
-  note={To appear on arXiv},
+@misc{ouyang2024omnidocbenchbenchmarkingdiversepdf,
+      title={OmniDocBench: Benchmarking Diverse PDF Document Parsing with Comprehensive Annotations}, 
+      author={Linke Ouyang and Yuan Qu and Hongbin Zhou and Jiawei Zhu and Rui Zhang and Qunshu Lin and Bin Wang and Zhiyuan Zhao and Man Jiang and Xiaomeng Zhao and Jin Shi and Fan Wu and Pei Chu and Minghao Liu and Zhenxiang Li and Chao Xu and Bo Zhang and Botian Shi and Zhongying Tu and Conghui He},
+      year={2024},
+      eprint={2412.07626},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2412.07626}, 
 }
 ```
