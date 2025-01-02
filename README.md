@@ -1402,6 +1402,7 @@ We provide several tools in the `tools` directory:
   - [internvl2_test_img2md.py](./tools/model_infer/internvl2_test_img2md.py) for using [InternVL2](https://github.com/OpenGVLab/InternVL) model to convert images to Markdown format, please use after configuring the InternVL2 model environment;
   - [GOT_img2md.py](./tools/model_infer/GOT_img2md.py) for using [GOT-OCR](https://github.com/Ucas-HaoranWei/GOT-OCR2.0) model to convert images to Markdown format, please use after configuring the GOT-OCR model environment;
   - [Qwen2VL_img2md.py](./tools/model_infer/Qwen2VL_img2md.py) for using [QwenVL](https://github.com/QwenLM/Qwen2-VL) model to convert images to Markdown format, please use after configuring the QwenVL model environment;
+  - [paddleOCR_ocr.py](./tools/model_infer/paddleOCR_ocr.py) is to invoke [PaddleOCR](https://paddlepaddle.github.io/PaddleOCR/latest) model for text recognition of block-level document text paragraphs. Please use it after configuring the PaddleOCR model environment. Other OCR models also use similar scripts for text OCR model prediction for the evaluation of text recognition.
 
 ## TODO
 

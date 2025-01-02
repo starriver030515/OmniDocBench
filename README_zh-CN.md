@@ -1397,6 +1397,7 @@ config中参数解释以及数据集格式请参考`Layout检测`小节，公式
   - [internvl2_test_img2md.py](./tools/model_infer/internvl2_test_img2md.py) 用于调用[InternVL2](https://github.com/OpenGVLab/InternVL)模型将图片转换为Markdown格式，请在配置了InternVL2模型环境后使用；
   - [GOT_img2md.py](./tools/model_infer/GOT_img2md.py) 用于调用[GOT-OCR](https://github.com/Ucas-HaoranWei/GOT-OCR2.0)模型将图片转换为Markdown格式，请在配置了GOT-OCR模型环境后使用；
   - [Qwen2VL_img2md.py](./tools/model_infer/Qwen2VL_img2md.py) 用于调用[QwenVL](https://github.com/QwenLM/Qwen2-VL)模型将图片转换为Markdown格式，请在配置了QwenVL模型环境后使用；
+  - [paddleOCR_ocr.py](./tools/model_infer/paddleOCR_ocr.py)用于调用[PaddleOCR](https://paddlepaddle.github.io/PaddleOCR/latest)模型对block级别的文档文本段落进行文本识别，请在配置了PaddleOCR模型环境后使用。其他的OCR模型也使用类似的脚本进行文本OCR的模型预测用于文本识别单模块的评测。
 
 ## TODO
 
