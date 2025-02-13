@@ -274,6 +274,8 @@ conda activate omnidocbench
 pip install -r requirements.txt
 ```
 
+如果需要评测的模型在解析表格时的格式是LaTeX, 则需要安装[LaTeXML](https://math.nist.gov/~BMiller/LaTeXML/)。它将会在评测过程中自动将LaTeX表格转换成HTML格式。*requirements.txt*文件中没有包括LaTeXML的安装，如果有需要请单独安装。
+
 所有的评测的输入都是通过config文件进行配置的，我们在[configs](./configs)路径下提供了各个任务的模板，并且在接下来的小节也会对config文件的内容做详细讲解。
 
 配置好config文件后，只需要将config文件作为参数传入，运行以下代码即可进行评测：

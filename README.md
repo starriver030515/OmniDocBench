@@ -279,6 +279,8 @@ conda activate omnidocbench
 pip install -r requirements.txt
 ```
 
+If your model parsing table in LaTeX format, you need to install the [LaTeXML](https://math.nist.gov/~BMiller/LaTeXML/) package. It will automatically convert LaTeX tables to HTML during evaluation process. We have not included the installation of this package in the *requirements.txt*. If needed, please install it separately.
+
 All evaluation inputs are configured through config files. We provide templates for each task under the [configs](./configs) directory, and we will explain the contents of the config files in detail in the following sections.
 
 After configuring the config file, simply pass it as a parameter and run the following code to perform the evaluation:
