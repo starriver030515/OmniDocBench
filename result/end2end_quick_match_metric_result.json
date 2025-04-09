@@ -56,6 +56,29 @@
                 "layout: other_layout": 0.7410071942446044,
                 "layout: single_column": 0.21256741250658073,
                 "layout: three_column": 0.12410369553226697
+            },
+            "Edit_dist_var": {
+                "ALL": 0.12670318274647951,
+                "None": 0.24349980369041774,
+                "colorful_backgroud": 0.008275949674904371,
+                "data_source: PPT2PDF": 2.8696051423324154e-05,
+                "data_source: academic_literature": 0.02108003433832291,
+                "data_source: book": 0.30721597210449936,
+                "data_source: colorful_textbook": 0.36955881832666876,
+                "data_source: exam_paper": 0.0011004491526445076,
+                "data_source: magazine": 0.02878547236098975,
+                "data_source: newspaper": 0.38359716809011585,
+                "data_source: note": 0.1189468492079176,
+                "data_source: research_report": 5.8050855071313256e-05,
+                "fuzzy_scan": 0.36955881832666876,
+                "language: en_ch_mixed": NaN,
+                "language: english": 0.006283533812446025,
+                "language: simplified_chinese": 0.12802998145259867,
+                "layout: 1andmore_column": 0.15466724897113043,
+                "layout: double_column": 0.1369478971438518,
+                "layout: other_layout": 0.1341545468661042,
+                "layout: single_column": 0.09547081238459139,
+                "layout: three_column": NaN
             }
         }
     },
@@ -82,6 +105,15 @@
                 "data_source: exam_paper": 0.5501543209876543,
                 "language: english": 0.4928989426720449,
                 "layout: single_column": 0.4928989426720449
+            },
+            "Edit_dist_var": {
+                "ALL": 0.006556356692127094,
+                "None": NaN,
+                "colorful_backgroud": NaN,
+                "data_source: academic_literature": NaN,
+                "data_source: exam_paper": NaN,
+                "language: english": 0.006556356692127094,
+                "layout: single_column": 0.006556356692127094
             }
         }
     },
@@ -183,6 +215,25 @@
                 "layout: other_layout": 0.027522935779816515,
                 "layout: single_column": 0.249039895800463
             },
+            "Edit_dist_var": {
+                "ALL": 0.02435005631932138,
+                "colorful_backgroud": 0.0116338159946536,
+                "data_source: academic_literature": NaN,
+                "data_source: book": NaN,
+                "data_source: colorful_textbook": NaN,
+                "data_source: exam_paper": NaN,
+                "data_source: magazine": NaN,
+                "data_source: note": 0.038662541479491726,
+                "data_source: research_report": 0.002983062861795785,
+                "fuzzy_scan": NaN,
+                "language: en_ch_mixed": NaN,
+                "language: english": 0.011803187604617509,
+                "language: simplified_chinese": 0.008918068381546107,
+                "layout: 1andmore_column": 9.810110909825489e-05,
+                "layout: double_column": NaN,
+                "layout: other_layout": NaN,
+                "layout: single_column": 0.03762592371192379
+            },
             "TEDS": {
                 "ALL": 0.8001187319330195,
                 "colorful_backgroud": 0.94092894583576,
@@ -255,6 +306,29 @@
                 "layout: other_layout": 0.6,
                 "layout: single_column": 0.08396178984414278,
                 "layout: three_column": 0.0
+            },
+            "Edit_dist_var": {
+                "ALL": 0.0828590360758528,
+                "None": 0.02073182214062095,
+                "colorful_backgroud": 0.0039447731755424065,
+                "data_source: PPT2PDF": 0.0,
+                "data_source: academic_literature": 0.014300389273356404,
+                "data_source: book": 0.125,
+                "data_source: colorful_textbook": 0.16326530612244897,
+                "data_source: exam_paper": 0.01183431952662722,
+                "data_source: magazine": 0.020000000000000004,
+                "data_source: newspaper": 0.5,
+                "data_source: note": 0.002958579881656805,
+                "data_source: research_report": 0.023195266272189347,
+                "fuzzy_scan": 0.16326530612244897,
+                "language: en_ch_mixed": NaN,
+                "language: english": 0.013150102104886508,
+                "language: simplified_chinese": 0.11825304243985563,
+                "layout: 1andmore_column": 0.0995266272189349,
+                "layout: double_column": 0.07809842687074829,
+                "layout: other_layout": 0.31999999999999995,
+                "layout: single_column": 0.02211313809663557,
+                "layout: three_column": NaN
             }
         }
     }

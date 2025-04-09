@@ -1,6 +1,6 @@
 # from modules.cal_matrix import cal_text_matrix, cal_table_teds
 from registry.registry import EVAL_TASK_REGISTRY
-from metrics.show_result import show_result, get_full_labels_results, get_page_split
+from metrics.show_result import show_result, get_full_labels_results, get_page_split, show_result_table
 from registry.registry import METRIC_REGISTRY
 import json
 import os
@@ -32,9 +32,9 @@ class End2EndEval():
                 samples, result_s = metric_val(samples).evaluate(group_info, f"{save_name}_{element}")
                 if result_s:
                     result.update(result_s)
-            if result:
-                print(f'【{element}】')
-                show_result(result)
+            # if result:
+            #     print(f'【{element}】')
+            #     show_result(result)
             result_all[element] = {}
             
             if md_flag:
@@ -60,4 +60,4 @@ class End2EndEval():
 
         with open(f'./result/{save_name}_metric_result.json', 'w', encoding='utf-8') as f:
             json.dump(result_all, f, indent=4, ensure_ascii=False)
-    
+        show_result_table(result_all)

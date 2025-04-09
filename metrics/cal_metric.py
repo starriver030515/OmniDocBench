@@ -13,7 +13,7 @@ from collections import defaultdict
 import pdb
 import copy
 import pandas as pd
-
+import numpy as np
 def get_groups(samples, group_info):
     group_samples = defaultdict(list)
     for sample in samples:
@@ -44,8 +44,16 @@ class call_TEDS():
         for sample in samples:
             gt = sample['norm_gt'] if sample.get('norm_gt') else sample['gt']
             pred = sample['norm_pred'] if sample.get('norm_pred') else sample['pred']
-            score = teds.evaluate(pred, gt)
-            score_structure_only = teds_structure_only.evaluate(pred, gt)
+            try:
+                score = teds.evaluate(pred, gt)
+            except:
+                score = 0
+                print(f'TEDS score error for table {sample["gt_idx"]} in {sample["img_id"]}. The score is set to 0.')
+            try:
+                score_structure_only = teds_structure_only.evaluate(pred, gt)
+            except:
+                score_structure_only = 0
+                print(f'TEDS_structure_only score error for table {sample["gt_idx"]} in {sample["img_id"]}. The score is set to 0.')
             # print('TEDS score:', score)
             group_scores['all'].append(score)
             group_scores_structure_only['all'].append(score_structure_only)
@@ -69,7 +77,7 @@ class call_TEDS():
             if len(scores) > 0:
                 result[group_name] = sum(scores) / len(scores)    # average of normalized scores at sample level
             else:
-                result[group_name] = 'NaN'
+                result[group_name] = np.nan
                 print(f'Warning: Empyty matched samples for {group_name}.')
         
         structure_only_result = {}
@@ -77,7 +85,7 @@ class call_TEDS():
             if len(scores) > 0:
                 structure_only_result[group_name] = sum(scores) / len(scores)    # average of normalized scores at sample level
             else:
-                structure_only_result[group_name] = 'NaN'
+                structure_only_result[group_name] = np.nan
                 print(f'Warning: Empyty matched samples for {group_name}.')
 
         return samples, {'TEDS': result, 'TEDS_structure_only': structure_only_result}
