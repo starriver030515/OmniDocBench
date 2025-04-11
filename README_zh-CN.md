@@ -54,9 +54,9 @@ OmniDocBench
 
 ## 更新
 
-[2025/03/27] 新增了Pix2Text、Unstructured、OpenParse、Gemini2.0-flash、Mistral OCR、OLMOCR、Qwen2.5-VL-72B模型的评测；
+[2025/03/27] 新增了Pix2Text、Unstructured、OpenParse、Gemini2.0-flash、Gemini2.5-pro、Mistral OCR、OLMOCR、Qwen2.5-VL-72B模型的评测；
 
-[2025/03/10] OmniDocBench被CVPR 2025接收啦
+[2025/03/10] OmniDocBench被CVPR 2025接收啦！
 
 [2025/01/16] 更新Marker、Tesseract OCR、StructEqTable版本；新增Docling、OpenOCR、EasyOCR评测；Table部分的Edit Distance计算改成用norm后的字段；新增评测模型版本信息。
 
@@ -302,7 +302,34 @@ pip install -r requirements.txt
 
 如果需要评测的模型在解析表格时的格式是LaTeX, 则需要安装[LaTeXML](https://math.nist.gov/~BMiller/LaTeXML/)。它将会在评测过程中自动将LaTeX表格转换成HTML格式。*requirements.txt*文件中没有包括LaTeXML的安装，如果有需要请单独安装。
 
+请下载OmniDocBench评测集：[Hugging Face](https://huggingface.co/datasets/opendatalab/OmniDocBench) or [OpenDataLab](https://opendatalab.com/OpenDataLab/OmniDocBench). 评测集的文件夹结构如下：
+
+```
+OmniDocBench/
+├── images/     // Image files
+│   ├── xxx.jpg
+│   ├── ...
+├── pdfs/       // Same page as images but in PDF format
+│   ├── xxx.pdf
+│   ├── ...
+├── OmniDocBench.json // OmniDocBench ground truth
+```
+
+使用图片或PDF进行推理都是允许的。推理结果应该以`markdown格式`存储在一个文件夹中，文件名与图片文件名相同但以`.md`为扩展名。
+
 所有的评测的输入都是通过config文件进行配置的，我们在[configs](./configs)路径下提供了各个任务的模板，并且在接下来的小节也会对config文件的内容做详细讲解。
+
+对于端到端评测，你只需要在[end2end.yaml](./configs/end2end.yaml)文件中的`ground_truth`的`data_path`中提供`OmniDocBench.json`的路径，在`prediction`的`data_path`中提供包含推理结果的文件夹路径，如下：
+
+```yaml
+ # -----以下是需要修改的部分 -----
+ dataset:
+    dataset_name: end2end_dataset
+    ground_truth:
+      data_path: ./OmniDocBench.json
+    prediction:
+      data_path: path/to/your/model/result/dir
+```
 
 配置好config文件后，只需要将config文件作为参数传入，运行以下代码即可进行评测：
 

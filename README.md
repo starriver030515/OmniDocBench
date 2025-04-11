@@ -62,9 +62,9 @@ Currently supported metrics include:
 
 ## Updates
 
-[2025/03/27] Added Pix2Text, Unstructured, OpenParse, Gemini2.0-flash, Mistral OCR, OLMOCR, Qwen2.5-VL-72B model evaluation;
+[2025/03/27] Added Pix2Text, Unstructured, OpenParse, Gemini2.0-flash, Gemini2.5-pro, Mistral OCR, olmOCR, Qwen2.5-VL-72B model evaluation;
 
-[2025/03/10] OmniDocBench be accepted by CVPR 2025!
+[2025/03/10] OmniDocBench has been accepted by CVPR 2025!
 
 [2025/01/16] Updated versions of Marker, Tesseract OCR, and StructEqTable; Added Docling, OpenOCR, and EasyOCR evaluations; Changed the Edit Distance calculation for the Table section to use normalized GTs and Preds; Added evaluation model version information.
 
@@ -313,7 +313,34 @@ pip install -r requirements.txt
 
 If your model parsing table in LaTeX format, you need to install the [LaTeXML](https://math.nist.gov/~BMiller/LaTeXML/) package. It will automatically convert LaTeX tables to HTML during evaluation process. We have not included the installation of this package in the *requirements.txt*. If needed, please install it separately.
 
-All evaluation inputs are configured through config files. We provide templates for each task under the [configs](./configs) directory, and we will explain the contents of the config files in detail in the following sections.
+Please download the OmniDocBench dataset from [Hugging Face](https://huggingface.co/datasets/opendatalab/OmniDocBench) or [OpenDataLab](https://opendatalab.com/OpenDataLab/OmniDocBench). The folder structure should be as follows:
+
+```
+OmniDocBench/
+├── images/     // Image files
+│   ├── xxx.jpg
+│   ├── ...
+├── pdfs/       // Same page as images but in PDF format
+│   ├── xxx.pdf
+│   ├── ...
+├── OmniDocBench.json // OmniDocBench ground truth
+```
+
+Run the model inference with images or pdfs is all allowed. The model inference results should be in `markdown format` and stored in the directory with the ***file name same as the image filename*** but with the `.md` extension.
+
+All evaluation inputs are configured through config files. We provide templates for each task under the [configs](./configs) directory, and we will explain the contents of the config files in detail in the following sections. 
+
+Simply, for end2end evaluation, you should provide the path to `OmniDocBench.json` in `data_path` of `ground_truth` and the path to the directory containing the model inference results in `data_path` of `prediction` in [end2end.yaml](./configs/end2end.yaml) as follows:
+
+```yaml
+ # ----- Here are the lines to be modifed -----
+ dataset:
+    dataset_name: end2end_dataset
+    ground_truth:
+      data_path: ./OmniDocBench.json
+    prediction:
+      data_path: path/to/your/model/result/dir
+```
 
 After configuring the config file, simply pass it as a parameter and run the following code to perform the evaluation:
 
