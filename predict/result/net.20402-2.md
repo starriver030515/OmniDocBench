@@ -1,0 +1,17 @@
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline  &  &  &  &  &  &  &  &  &  &  \\
+\hline  &  &  &  &  &  &  &  \\
+\end{tabular}
+\begin{tabular}{|c|}
+\hline  &  &  &  &  &  \\
+\hline  \\
+\end{tabular}
+\begin{tabular}{|c|c|c|c|}
+\hline  &  &  \\
+\hline  &  &  &  &  \\
+\end{tabular}
+
+\begin{tabular}{|c|c|c|}
+\hline  &  &  &  \\
+\hline  &  &  &  \\
+\end{tabular}

@@ -117,7 +117,7 @@ for root, _, files in os.walk(input_dir):
             inputs = inputs.to("cuda")
 
             set_seed(0)
-            generated_ids = model.generate(**inputs, max_new_tokens=32000, temperature=0.01,do_sample=False)
+            generated_ids = model.generate(**inputs, max_new_tokens=1024, temperature=0.01,do_sample=False)
             generated_ids_trimmed = [
                 out_ids[len(in_ids) :] for in_ids, out_ids in zip(inputs.input_ids, generated_ids)
             ]

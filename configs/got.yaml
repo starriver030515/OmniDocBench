@@ -1,0 +1,18 @@
+end2end_eval:
+  metrics:
+    text_block:
+      metric:
+        - Edit_dist
+    table:
+      metric:
+        - Edit_dist
+    reading_order:
+      metric:
+        - Edit_dist
+  dataset:
+    dataset_name: md2md_dataset
+    ground_truth:
+      data_path: /data/zhangchaobin/workspace/playground/eval/got_format_benchmark/ground_truth
+    prediction:
+      data_path: /data/zhangchaobin/workspace/playground/eval/got_format_benchmark/results_1
+    match_method: quick_match

@@ -286,16 +286,14 @@ class End2EndDataset():
         if gt_page_elements.get('table'):
             gt_table_list = self.get_sorted_text_list(gt_page_elements['table'])
             # print('gt_table_list', gt_table_list)
-            latex_table_len = len(pred_dataset['latex_table']) if pred_dataset['latex_table'] else 0
-            html_table_len = len(pred_dataset['html_table']) if pred_dataset['html_table'] else 0
-            if latex_table_len == html_table_len and latex_table_len == 0:
-                html_table_match_s = match_gt2pred_simple(gt_table_list, [], 'html_table', img_name) # Don't consider truncated merging for tables
-                html_table_match_s = [x for x in html_table_match_s if x['gt_idx'] != [""]]  # Remove extra preds
-            elif latex_table_len > html_table_len:
+            if pred_dataset['latex_table']:
                 latex_table_match_s = match_gt2pred_simple(gt_table_list, pred_dataset['latex_table'], 'latex_table', img_name) # Don't consider truncated merging for tables
-                latex_table_match_s = [x for x in latex_table_match_s if x['gt_idx'] != [""]]  # Remove extra preds                
-            else:
+                latex_table_match_s = [x for x in latex_table_match_s if x['gt_idx'] != [""]]  # Remove extra preds
+            if pred_dataset['html_table']:   # Assume model won't randomly output both latex and html, but will choose one
                 html_table_match_s = match_gt2pred_simple(gt_table_list, pred_dataset['html_table'], 'html_table', img_name) # Don't consider truncated merging for tables
+                html_table_match_s = [x for x in html_table_match_s if x['gt_idx'] != [""]]  # Remove extra preds
+            else:
+                html_table_match_s = match_gt2pred_simple(gt_table_list, [], 'html_table', img_name) # Don't consider truncated merging for tables
                 html_table_match_s = [x for x in html_table_match_s if x['gt_idx'] != [""]]  # Remove extra preds
 
         # Handle reading order

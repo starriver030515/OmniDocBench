@@ -1,4 +1,4 @@
-![Image](https://github.com/user-attachments/assets/22a10ee4-c993-471f-9c9f-7a6c4d2e3df8)
+![](https://github.com/user-attachments/assets/f705bf54-5dd2-42ba-af2d-40a0a174b0b0)
 
 <h1 align="center">
 OmniDocBench
@@ -32,42 +32,6 @@ Currently supported metrics include:
 - TEDS
 - COCODet (mAP, mAR, etc.)
 
-## Table of Contents
-- [Updates](#updates)
-- [Benchmark Introduction](#benchmark-introduction)
-  - [Dataset File Format](#dataset-file-format)
-  - [Evaluation Categories](#evaluation-categories)
-  - [Attribute Labels](#attribute-labels)
-- [Evaluation](#evaluation)
-  - [Environment Setup and Running](#environment-setup-and-running)
-  - [End-to-End Evaluation](#end-to-end-evaluation)
-    - [End-to-End Evaluation Method - end2end](#end-to-end-evaluation-method---end2end)
-    - [End-to-end Evaluation Method - md2md](#end-to-end-evaluation-method---md2md)
-  - [Formula Recognition Evaluation](#formula-recognition-evaluation)
-  - [Text OCR Evaluation](#text-ocr-evaluation)
-  - [Table Recognition Evaluation](#table-recognition-evaluation)
-  - [Layout Detection](#layout-detection)
-  - [Formula Detection](#formula-detection)
-- [Tools](#tools)
-- [The evaluation model information](#the-evaluation-model-information)
-  - [end2end](#end2end)
-  - [Layout](#layout)
-  - [Formula](#formula)
-  - [Table](#table)
-- [TODO](#todo)
-- [Known Issues](#known-issues)
-- [Acknowledgement](#acknowledgement)
-- [Copyright Statement](#copyright-statement)
-- [Citation](#citation)
-
-## Updates
-
-[2025/03/27] Added Pix2Text, Unstructured, OpenParse, Gemini2.0-flash, Gemini2.5-pro, Mistral OCR, olmOCR, Qwen2.5-VL-72B model evaluation;
-
-[2025/03/10] OmniDocBench has been accepted by CVPR 2025!
-
-[2025/01/16] Updated versions of Marker, Tesseract OCR, and StructEqTable; Added Docling, OpenOCR, and EasyOCR evaluations; Changed the Edit Distance calculation for the Table section to use normalized GTs and Preds; Added evaluation model version information.
-
 ## Benchmark Introduction
 
 This benchmark includes 981 PDF pages, covering 9 document types, 4 layout types, and 3 language types. OmniDocBench features rich annotations, containing 15 block-level annotations (text paragraphs, headings, tables, etc.) and 4 span-level annotations (text lines, inline formulas, subscripts, etc.). All text-related annotation boxes include text recognition annotations, formulas contain LaTeX annotations, and tables include both LaTeX and HTML annotations. OmniDocBench also provides reading order annotations for document components. Additionally, it includes various attribute tags at the page and block levels, with annotations for 5 page attribute tags, 3 text attribute tags, and 6 table attribute tags.
@@ -75,7 +39,7 @@ This benchmark includes 981 PDF pages, covering 9 document types, 4 layout types
 ![](https://github.com/user-attachments/assets/f3e53ba8-bb97-4ca9-b2e7-e2530865aaa9)
 
 <details>
-  <summary>【Dataset Format】</summary>
+  <summary>Dataset Format</summary>
 
 The dataset format is JSON, with the following structure and field explanations:
 
@@ -152,7 +116,7 @@ The dataset format is JSON, with the following structure and field explanations:
 </details>
 
 <details>
-  <summary>【Evaluation Categories】</summary>
+  <summary>Evaluation Categories</summary>
 
 Evaluation categories include:
 
@@ -187,7 +151,7 @@ Evaluation categories include:
 </details>
 
 <details>
-  <summary>【Attribute Labels】</summary>
+  <summary>Attribute Labels</summary>
 
 Page classification attributes include:
 
@@ -306,41 +270,12 @@ OmniDocBench has developed an evaluation methodology based on document component
 To set up the environment, simply run the following commands in the project directory:
 
 ```bash
-conda create -n omnidocbench python=3.10
+conda create -n omnidocbench python=3.8
 conda activate omnidocbench
 pip install -r requirements.txt
 ```
 
-If your model parsing table in LaTeX format, you need to install the [LaTeXML](https://math.nist.gov/~BMiller/LaTeXML/) package. It will automatically convert LaTeX tables to HTML during evaluation process. We have not included the installation of this package in the *requirements.txt*. If needed, please install it separately.
-
-Please download the OmniDocBench dataset from [Hugging Face](https://huggingface.co/datasets/opendatalab/OmniDocBench) or [OpenDataLab](https://opendatalab.com/OpenDataLab/OmniDocBench). The folder structure should be as follows:
-
-```
-OmniDocBench/
-├── images/     // Image files
-│   ├── xxx.jpg
-│   ├── ...
-├── pdfs/       // Same page as images but in PDF format
-│   ├── xxx.pdf
-│   ├── ...
-├── OmniDocBench.json // OmniDocBench ground truth
-```
-
-Run the model inference with images or pdfs is all allowed. The model inference results should be in `markdown format` and stored in the directory with the ***file name same as the image filename*** but with the `.md` extension.
-
-All evaluation inputs are configured through config files. We provide templates for each task under the [configs](./configs) directory, and we will explain the contents of the config files in detail in the following sections. 
-
-Simply, for end2end evaluation, you should provide the path to `OmniDocBench.json` in `data_path` of `ground_truth` and the path to the directory containing the model inference results in `data_path` of `prediction` in [end2end.yaml](./configs/end2end.yaml) as follows:
-
-```yaml
- # ----- Here are the lines to be modifed -----
- dataset:
-    dataset_name: end2end_dataset
-    ground_truth:
-      data_path: ./OmniDocBench.json
-    prediction:
-      data_path: path/to/your/model/result/dir
-```
+All evaluation inputs are configured through config files. We provide templates for each task under the [configs](./configs) directory, and we will explain the contents of the config files in detail in the following sections.
 
 After configuring the config file, simply pass it as a parameter and run the following code to perform the evaluation:
 
@@ -348,46 +283,23 @@ After configuring the config file, simply pass it as a parameter and run the fol
 python pdf_validation.py --config <config_path>
 ```
 
-After running the evaluation, the results will be stored in the [result](./result) directory. You can use the [tools/generate_result_tables.ipynb](./tools/generate_result_tables.ipynb) to generate the result leaderboard.
-
-<details>
-  <summary>【The information of result folder】</summary>
-
-The result folder contains the following information:
-
-```
-result/
-├── <model_name>_<match_method>_metric_result.json
-├── <model_name>_<match_method>_<element>_per_page_edit.json
-├── <model_name>_<match_method>_<element>_result.json
-```
-
-The `<model_name>` is the name of the model (it is the same as the folder name of prediction results in the config file). `<match_method>` is the method used for matching, for example, `quick_match` or `simple_match`. `<element>` is the element type, including `text`, `dispaly_formula`, `table`, and `reading_order`.
-
-The `<model_name>_<match_method>_metric_result.json` file contains the evaluation metrics, including edit distance, TEDS, etc.
-
-The `<model_name>_<match_method>_<element>_per_page_edit.json` file contains the edit distance of each page for each element.
-
-The `<model_name>_<match_method>_<element>_result.json` file contains the matched pairs of ground truth and predictions for each element.
-
-</details>
-
 ### End-to-End Evaluation
 
 End-to-end evaluation assesses the model's accuracy in parsing PDF page content. The evaluation uses the model's Markdown output of the entire PDF page parsing results as the prediction.
 
-<table style="width: 92%; margin: auto; border-collapse: collapse;">
+<table style="width: 92%; border-collapse: collapse; margin: 0 auto;">
+  <caption>Comprehensive evaluation of document parsing algorithms on OmniDocBench: performance metrics for text, formula, table, and reading order extraction, with overall scores derived from ground truth comparisons.</caption>
   <thead>
     <tr>
       <th rowspan="2">Method Type</th>
       <th rowspan="2">Methods</th>
-      <th colspan="2">Overall<sup>Edit</sup>↓</th>
       <th colspan="2">Text<sup>Edit</sup>↓</th>
       <th colspan="2">Formula<sup>Edit</sup>↓</th>
       <th colspan="2">Formula<sup>CDM</sup>↑</th>
       <th colspan="2">Table<sup>TEDS</sup>↑</th>
       <th colspan="2">Table<sup>Edit</sup>↓</th>
       <th colspan="2">Read Order<sup>Edit</sup>↓</th>
+      <th colspan="2">Overall<sup>Edit</sup>↓</th>
     </tr>
     <tr>
       <th>EN</th>
@@ -408,321 +320,148 @@ End-to-end evaluation assesses the model's accuracy in parsing PDF page content.
   </thead>
   <tbody>
     <tr>
-      <td rowspan="7">Pipeline Tools</td>
-      <td>MinerU-0.9.3</sup></td>
-      <td>0.15</td>
-      <td>0.357</td>
-      <td>0.061</td>
-      <td>0.215</td>
-      <td>0.278</td>
+      <td rowspan="3">Pipeline Tools</td>
+      <td>MinerU-0.9.3</td>
+      <td><strong>0.058</strong></td>
+      <td><strong>0.211</strong></td>
+      <td><strong>0.278</strong></td>
       <td>0.577</td>
-      <td>57.3</td>
-      <td>42.9</td>
-      <td>78.6</td>
-      <td>62.1</td>
-      <td>0.18</td>
-      <td>0.344</td>
-      <td>0.079</td>
-      <td>0.292</td>
-    </tr>
-    <tr>
-      <td>Marker-1.2.3</sup></td>
-      <td>0.336</td>
-      <td>0.556</td>
-      <td>0.08</td>
-      <td>0.315</td>
-      <td>0.53</td>
-      <td>0.883</td>
-      <td>17.6</td>
-      <td>11.7</td>
-      <td>67.6</td>
-      <td>49.2</td>
-      <td>0.619</td>
-      <td>0.685</td>
-      <td>0.114</td>
-      <td>0.34</td>
-    </tr>
-    <tr>
-      <td>Mathpix</sup></td>
-      <td>0.191</td>
-      <td>0.365</td>
-      <td>0.105</td>
-      <td>0.384</td>
-      <td>0.306</td>
-      <td>0.454</td>
+      <td>66.9</td>
+      <td>49.5</td>
+      <td><strong>79.4</strong></td>
       <td>62.7</td>
-      <td>62.1</td>
-      <td>77.0</td>
-      <td>67.1</td>
-      <td>0.243</td>
-      <td>0.32</td>
-      <td>0.108</td>
-      <td>0.304</td>
+      <td><strong>0.305</strong></td>
+      <td><u>0.461</u></td>
+      <td><strong>0.079</strong></td>
+      <td>0.288</td>
+      <td><strong>0.180</strong></td>
+      <td><u>0.384</u></td>
     </tr>
     <tr>
-      <td>Docling-2.14.0</td>
-      <td>0.589</td>
-      <td>0.909</td>
-      <td>0.416</td>
-      <td>0.987</td>
-      <td>0.999</td>
-      <td>1</td>
-      <td>-</td>
-      <td>-</td>
-      <td>61.3</td>
-      <td>25.0</td>
-      <td>0.627</td>
-      <td>0.810</td>
-      <td>0.313</td>
-      <td>0.837</td>
-    </tr>
-    <tr>
-      <td>Pix2Text-1.1.2.3</td>
-      <td>0.32</td>
-      <td>0.528</td>
+      <td>Marker-0.2.17</td>
+      <td>0.141</td>
+      <td>0.303</td>
+      <td>0.667</td>
+      <td>0.868</td>
+      <td>18.4</td>
+      <td>12.7</td>
+      <td>54.0</td>
+      <td>45.8</td>
+      <td>0.718</td>
+      <td>0.763</td>
       <td>0.138</td>
-      <td>0.356</td>
-      <td><strong>0.276</strong></td>
-      <td>0.611</td>
-      <td>78.4</td>
-      <td>39.6</td>
-      <td>73.6</td>
-      <td>66.2</td>
-      <td>0.584</td>
-      <td>0.645</td>
-      <td>0.281</td>
-      <td>0.499</td>
+      <td>0.306</td>
+      <td>0.416</td>
+      <td>0.560</td>
     </tr>
     <tr>
-      <td>Unstructured-0.17.2</td>
-      <td>0.586</td>
-      <td>0.716</td>
-      <td>0.198</td>
-      <td>0.481</td>
-      <td>0.999</td>
-      <td>1</td>
-      <td>-</td>
-      <td>-</td>
-      <td>0</td>
-      <td>0.064</td>
-      <td>1</td>
-      <td>0.998</td>
-      <td>0.145</td>
-      <td>0.387</td>
+      <td>Mathpix</td>
+      <td><u>0.101</u></td>
+      <td>0.358</td>
+      <td><u>0.306</u></td>
+      <td><strong>0.454</strong></td>
+      <td>71.4</td>
+      <td><strong>72.7</strong></td>
+      <td><u>77.9</u></td>
+      <td><strong>68.2</strong></td>
+      <td><u>0.322</u></td>
+      <td><strong>0.416</strong></td>
+      <td><u>0.105</u></td>
+      <td>0.275</td>
+      <td><u>0.209</u></td>
+      <td><strong>0.376</strong></td>
     </tr>
     <tr>
-      <td>OpenParse-0.7.0</td>
-      <td>0.646</td>
-      <td>0.814</td>
-      <td>0.681</td>
-      <td>0.974</td>
-      <td>0.996</td>
-      <td>1</td>
-      <td>0.106</td>
-      <td>0</td>
-      <td>64.8</td>
-      <td>27.5</td>
-      <td>0.284</td>
-      <td>0.639</td>
-      <td>0.595</td>
-      <td>0.641</td>
-    </tr>
-    <tr>
-      <td rowspan="5">Expert VLMs</td>
-      <td>GOT-OCR</sup></td>
-      <td>0.287</td>
-      <td>0.411</td>
-      <td>0.189</td>
+      <td rowspan="2">Expert VLMs</td>
+      <td>GOT-OCR</td>
+      <td>0.187</td>
       <td>0.315</td>
       <td>0.360</td>
-      <td>0.528</td>
-      <td>74.3</td>
-      <td>45.3</td>
-      <td>53.2</td>
-      <td>47.2</td>
-      <td>0.459</td>
-      <td>0.52</td>
+      <td><u>0.528</u></td>
+      <td><strong>81.8</strong></td>
+      <td>51.4</td>
+      <td>53.5</td>
+      <td>48.0</td>
+      <td>0.521</td>
+      <td>0.594</td>
       <td>0.141</td>
       <td>0.28</td>
+      <td>0.302</td>
+      <td>0.429</td>
     </tr>
     <tr>
-      <td>Nougat</sup></td>
-      <td>0.452</td>
-      <td>0.973</td>
+      <td>Nougat</td>
       <td>0.365</td>
       <td>0.998</td>
       <td>0.488</td>
       <td>0.941</td>
-      <td>15.1</td>
-      <td>16.8</td>
-      <td>39.9</td>
+      <td>17.4</td>
+      <td>16.9</td>
+      <td>40.3</td>
       <td>0.0</td>
-      <td>0.572</td>
+      <td>0.622</td>
       <td>1.000</td>
       <td>0.382</td>
       <td>0.954</td>
+      <td>0.464</td>
+      <td>0.973</td>
     </tr>
     <tr>
-      <td>Mistral OCR</td>
-      <td>0.268</td>
-      <td>0.439</td>
-      <td>0.072</td>
-      <td>0.325</td>
-      <td>0.318</td>
-      <td>0.495</td>
-      <td>64.6</td>
-      <td>45.9</td>
-      <td>75.8</td>
-      <td>63.6</td>
-      <td>0.6</td>
-      <td>0.65</td>
-      <td>0.083</td>
-      <td>0.284</td>
-    </tr>
-    <tr>
-      <td>OLMOCR-sglang</td>
-      <td>0.326</td>
-      <td>0.469</td>
-      <td>0.097</td>
-      <td>0.293</td>
-      <td>0.455</td>
-      <td>0.655</td>
-      <td>74.3</td>
-      <td>43.2</td>
-      <td>68.1</td>
-      <td>61.3</td>
-      <td>0.608</td>
-      <td>0.652</td>
-      <td>0.145</td>
-      <td>0.277</td>
-    </tr>
-    <tr>
-      <td>SmolDocling-256M_transformer</td>
-      <td>0.493</td>
-      <td>0.816</td>
-      <td>0.262</td>
-      <td>0.838</td>
-      <td>0.753</td>
-      <td>0.997</td>
-      <td>32.1</td>
-      <td>0.551</td>
-      <td>44.9</td>
-      <td>16.5</td>
-      <td>0.729</td>
-      <td>0.907</td>
-      <td>0.227</td>
-      <td>0.522</td>
-    </tr>
-    <tr>
-      <td rowspan="8">General VLMs</td>
-    <tr>
-      <td>Gemini2.0-flash</td>
-      <td>0.191</td>
-      <td>0.264</td>
-      <td>0.091</td>
-      <td>0.139</td>
-      <td>0.389</td>
-      <td>0.584</td>
-      <td>77.6</td>
-      <td>43.6</td>
-      <td>79.7</td>
-      <td>78.9</td>
-      <td>0.193</td>
-      <td>0.206</td>
-      <td>0.092</td>
-      <td>0.128</td>
-    </tr>
-    <tr>
-      <td>Gemini2.5-Pro</td>
-      <td><strong>0.148</strong></td>
-      <td><strong>0.212</strong></td>
-      <td><strong>0.055</strong></td>
-      <td><strong>0.168</strong></td>
-      <td>0.356</td>
-      <td>0.439</td>
-      <td>80.0</td>
-      <td><strong>69.4</strong></td>
-      <td><strong>85.8</strong></td>
-      <td><strong>86.4</strong></td>
-      <td><strong>0.13</strong></td>
-      <td><strong>0.119</strong></td>
-      <td><strong>0.049</strong></td>
-      <td><strong>0.121</strong></td>
-    </tr>
-    <tr>
+      <td rowspan="3">General VLMs</td>
       <td>GPT4o</td>
-      <td>0.233</td>
-      <td>0.399</td>
       <td>0.144</td>
       <td>0.409</td>
       <td>0.425</td>
       <td>0.606</td>
-      <td>72.8</td>
-      <td>42.8</td>
-      <td>72.0</td>
-      <td>62.9</td>
-      <td>0.234</td>
-      <td>0.329</td>
+      <td><u>76.4</u></td>
+      <td>48.2</td>
+      <td>72.75</td>
+      <td>63.7</td>
+      <td>0.363</td>
+      <td>0.474</td>
       <td>0.128</td>
       <td>0.251</td>
+      <td>0.265</td>
+      <td>0.435</td>
     </tr>
     <tr>
       <td>Qwen2-VL-72B</td>
       <td>0.252</td>
-      <td>0.327</td>
-      <td>0.096</td>
-      <td>0.218</td>
-      <td>0.404</td>
-      <td>0.487</td>
-      <td><strong>82.2</strong></td>
-      <td>61.2</td>
-      <td>76.8</td>
-      <td>76.4</td>
-      <td>0.387</td>
+      <td><u>0.251</u></td>
+      <td>0.468</td>
+      <td>0.572</td>
+      <td>54.9</td>
+      <td><u>60.9</u></td>
+      <td>59.9</td>
+      <td><u>66.8</u></td>
+      <td>0.591</td>
+      <td>0.587</td>
+      <td>0.255</td>
+      <td><strong>0.223</strong></td>
+      <td>0.392</td>
       <td>0.408</td>
-      <td>0.119</td>
-      <td>0.193</td>
     </tr>
     <tr>
-      <td>Qwen2.5-VL-72B</td>
-      <td>0.214</td>
-      <td>0.261</td>
-      <td>0.092</td>
-      <td>0.18</td>
-      <td>0.315</td>
-      <td><strong>0.434</strong></td>
-      <td>68.8</td>
-      <td>62.5</td>
-      <td>82.9</td>
-      <td>83.9</td>
-      <td>0.341</td>
-      <td>0.262</td>
-      <td>0.106</td>
-      <td>0.168</td>
-    </tr>
-    <tr>
-      <td>InternVL2-76B</sup></td>
-      <td>0.44</td>
-      <td>0.443</td>
+      <td>InternVL2-Llama3-76B</td>
       <td>0.353</td>
       <td>0.290</td>
       <td>0.543</td>
       <td>0.701</td>
-      <td>67.4</td>
-      <td>44.1</td>
-      <td>63.0</td>
-      <td>60.2</td>
-      <td>0.547</td>
-      <td>0.555</td>
+      <td>69.8</td>
+      <td>49.6</td>
+      <td>63.8</td>
+      <td>61.1</td>
+      <td>0.616</td>
+      <td>0.638</td>
       <td>0.317</td>
-      <td>0.228</td>
+      <td><u>0.228</u></td>
+      <td>0.457</td>
+      <td>0.464</td>
     </tr>
   </tbody>
 </table>
 
-<p>Comprehensive evaluation of document parsing algorithms on OmniDocBench: performance metrics for text, formula, table, and reading order extraction, with overall scores derived from ground truth comparisons.</p>
-
-More detailed attribute-level evaluation results are shown in the paper. Or you can use the [tools/generate_result_tables.ipynb](./tools/generate_result_tables.ipynb) to generate the result leaderboard.
+More detailed attribute-level evaluation results are shown in the paper.
 
 #### End-to-End Evaluation Method - end2end
 
@@ -739,7 +478,7 @@ The `end2end` evaluation can assess four dimensions. We provide an example of en
 - Reading order
 
 <details>
-  <summary>【Field explanations for end2end.yaml】</summary>
+  <summary>Field explanations for end2end.yaml</summary>
 
 The configuration of `end2end.yaml` is as follows:
 
@@ -800,7 +539,7 @@ The `md2md` evaluation can assess four dimensions:
 - Reading order
 
 <details>
-  <summary>【Field explanations for md2md.yaml】</summary>
+  <summary>Field explanations for md2md.yaml</summary>
 
 The configuration of `md2md.yaml` is as follows:
 
@@ -867,7 +606,7 @@ OmniDocBench contains bounding box information for formulas on each PDF page alo
     </tr>
     <tr>
       <td>Mathpix</td>
-      <td>86.6</td>
+      <td><u>86.6</u></td>
       <td>2.8</td>
       <td><b>66.56</b></td>
       <td>0.322</td>
@@ -882,8 +621,8 @@ OmniDocBench contains bounding box information for formulas on each PDF page alo
     <tr>
       <td>UniMERNet-B</td>
       <td>85.0</td>
-      <td>60.2</td>
-      <td>60.84</td>
+      <td><u>60.2</u></td>
+      <td><u>60.84</u></td>
       <td><b>0.238</b></td>
     </tr>
     <tr>
@@ -891,7 +630,7 @@ OmniDocBench contains bounding box information for formulas on each PDF page alo
       <td><b>86.8</b></td>
       <td><b>65.5</b></td>
       <td>45.17</td>
-      <td>0.282</td>
+      <td><u>0.282</u></td>
     </tr>
     <tr>
       <td>InternVL2-Llama3-76B</td>
@@ -915,7 +654,7 @@ OmniDocBench contains bounding box information for formulas on each PDF page alo
 Formula recognition evaluation can be configured according to [formula_recognition](./configs/formula_recognition.yaml).
 
 <details>
-  <summary>【Field explanations for formula_recognition.yaml】</summary>
+  <summary>Field explanations for formula_recognition.yaml</summary>
 
 The configuration of `formula_recognition.yaml` is as follows:
 
@@ -1013,172 +752,148 @@ with open('./demo_data/recognition/OmniDocBench_demo_formula.json', 'w', encodin
 
 </details>
 
-### Text OCR Evaluation
+### OCR Text Recognition Evaluation
 
 OmniDocBench contains bounding box information and corresponding text recognition annotations for all text in each PDF page, making it suitable as a benchmark for OCR evaluation. The text annotations include both block-level and span-level annotations, both of which can be used for evaluation. This repo currently provides an example of block-level evaluation, which evaluates OCR at the text paragraph level.
 
-<table style="width: 90%; margin: auto; border-collapse: collapse; font-size: small;">
-  <thead>
-    <tr>
-      <th rowspan="2">Model Type</th>
-      <th rowspan="2">Model</th>
-      <th colspan="3">Language</th>
-      <th colspan="3">Text background</th>
-      <th colspan="4">Text Rotate</th>
-    </tr>
-    <tr>
-      <th><i>EN</i></th>
-      <th><i>ZH</i></th>
-      <th><i>Mixed</i></th>
-      <th><i>White</i></th>
-      <th><i>Single</i></th>
-      <th><i>Multi</i></th>
-      <th><i>Normal</i></th>
-      <th><i>Rotate90</i></th>
-      <th><i>Rotate270</i></th>
-      <th><i>Horizontal</i></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td rowspan="7" style="text-align: center;">Pipeline Tools<br>&<br>Expert Vision<br>Models</td>
-      <td>PaddleOCR</td>
-      <td>0.071</td>
-      <td>0.055</td>
-      <td>0.118</td>
-      <td>0.060</td>
-      <td>0.038</td>
-      <td>0.085</td>
-      <td>0.060</td>
-      <td>0.015</td>
-      <td>0.285</td>
-      <td>0.021</td>
-    </tr>
-    <tr>
-      <td>OpenOCR</td>
-      <td>0.07</td>
-      <td>0.068</td>
-      <td>0.106</td>
-      <td>0.069</td>
-      <td>0.058</td>
-      <td>0.081</td>
-      <td>0.069</td>
-      <td>0.038</td>
-      <td>0.891</td>
-      <td>0.025</td>
-    </tr>
-    <tr>
-      <td>Tesseract-OCR</td>
-      <td>0.096</td>
-      <td>0.551</td>
-      <td>0.250</td>
-      <td>0.439</td>
-      <td>0.328</td>
-      <td>0.331</td>
-      <td>0.426</td>
-      <td>0.117</td>
-      <td>0.969</td>
-      <td>0.984</td>
-    </tr>
-    <tr>
-      <td>EasyOCR</td>
-      <td>0.26</td>
-      <td>0.398</td>
-      <td>0.445</td>
-      <td>0.366</td>
-      <td>0.287</td>
-      <td>0.388</td>
-      <td>0.36</td>
-      <td>0.97</td>
-      <td>0.997</td>
-      <td>0.926</td>
-    </tr>
-    <tr>
-      <td>Surya</td>
-      <td>0.057</td>
-      <td>0.123</td>
-      <td>0.164</td>
-      <td>0.093</td>
-      <td>0.186</td>
-      <td>0.235</td>
-      <td>0.104</td>
-      <td>0.634</td>
-      <td>0.767</td>
-      <td>0.255</td>
-    </tr>
-    <tr>
-      <td>Mathpix</td>
-      <td>0.033</td>
-      <td>0.240</td>
-      <td>0.261</td>
-      <td>0.185</td>
-      <td>0.121</td>
-      <td>0.166</td>
-      <td>0.180</td>
-      <td>0.038</td>
-      <td>0.185</td>
-      <td>0.638</td>
-    </tr>
-    <tr>
-      <td>GOT-OCR</td>
-      <td>0.041</td>
-      <td>0.112</td>
-      <td>0.135</td>
-      <td>0.092</td>
-      <td>0.052</td>
-      <td>0.155</td>
-      <td>0.091</td>
-      <td>0.562</td>
-      <td>0.966</td>
-      <td>0.097</td>
-    </tr>
-    <tr>
-      <td rowspan="3" style="text-align: center;">Vision Language<br>Models</td>
-      <td>Qwen2-VL-72B</td>
-      <td>0.072</td>
-      <td>0.274</td>
-      <td>0.286</td>
-      <td>0.234</td>
-      <td>0.155</td>
-      <td>0.148</td>
-      <td>0.223</td>
-      <td>0.273</td>
-      <td>0.721</td>
-      <td>0.067</td>
-    </tr>
-    <tr>
-      <td>InternVL2-76B</td>
-      <td>0.074</td>
-      <td>0.155</td>
-      <td>0.242</td>
-      <td>0.113</td>
-      <td>0.352</td>
-      <td>0.269</td>
-      <td>0.132</td>
-      <td>0.610</td>
-      <td>0.907</td>
-      <td>0.595</td>
-    </tr>
-    <tr>
-      <td>GPT4o</td>
-      <td>0.020</td>
-      <td>0.224</td>
-      <td>0.125</td>
-      <td>0.167</td>
-      <td>0.140</td>
-      <td>0.220</td>
-      <td>0.168</td>
-      <td>0.115</td>
-      <td>0.718</td>
-      <td>0.132</td>
-    </tr>
-  </tbody>
+<table style="width: 90%; font-size: small; margin: 0 auto; border-collapse: collapse;">
+    <caption style="caption-side: bottom; padding-top: 4px;">Component-level evaluation on OmniDocBench OCR subset: results grouped by text attributes using the edit distance metric.</caption>
+    <thead>
+        <tr>
+            <th rowspan="2" style="border-bottom: 1px solid #000;">Model Type</th>
+            <th rowspan="2" style="border-bottom: 1px solid #000;">Model</th>
+            <th colspan="3" style="border-bottom: 1px solid #000;">Language</th>
+            <th colspan="3" style="border-bottom: 1px solid #000;">Text background</th>
+            <th colspan="4" style="border-bottom: 1px solid #000;">Text Rotate</th>
+        </tr>
+        <tr>
+            <th style="border-bottom: 1px solid #000;">EN</th>
+            <th style="border-bottom: 1px solid #000;">ZH</th>
+            <th style="border-bottom: 1px solid #000;">Mixed</th>
+            <th style="border-bottom: 1px solid #000;">White</th>
+            <th style="border-bottom: 1px solid #000;">Single</th>
+            <th style="border-bottom: 1px solid #000;">Multi</th>
+            <th style="border-bottom: 1px solid #000;">Normal</th>
+            <th style="border-bottom: 1px solid #000;">Rotate90</th>
+            <th style="border-bottom: 1px solid #000;">Rotate270</th>
+            <th style="border-bottom: 1px solid #000;">Horizontal</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan="5">Expert Vision Models</td>
+            <td>PaddleOCR</td>
+            <td>0.071</td>
+            <td><strong>0.055</strong></td>
+            <td><strong>0.118</strong></td>
+            <td><strong>0.060</strong></td>
+            <td><strong>0.038</strong></td>
+            <td><strong>0.0848</strong></td>
+            <td><strong>0.060</strong></td>
+            <td><strong>0.015</strong></td>
+            <td style="text-decoration: underline;">0.285</td>
+            <td><strong>0.021</strong></td>
+        </tr>
+        <tr>
+            <td>Tesseract OCR</td>
+            <td>0.179</td>
+            <td>0.553</td>
+            <td>0.553</td>
+            <td>0.453</td>
+            <td>0.463</td>
+            <td>0.394</td>
+            <td>0.448</td>
+            <td>0.369</td>
+            <td>0.979</td>
+            <td>0.982</td>
+        </tr>
+        <tr>
+            <td>Surya</td>
+            <td>0.057</td>
+            <td>0.123</td>
+            <td>0.164</td>
+            <td>0.093</td>
+            <td>0.186</td>
+            <td>0.235</td>
+            <td>0.104</td>
+            <td>0.634</td>
+            <td>0.767</td>
+            <td>0.255</td>
+        </tr>
+        <tr>
+            <td>GOT-OCR</td>
+            <td>0.041</td>
+            <td style="text-decoration: underline;">0.112</td>
+            <td>0.135</td>
+            <td style="text-decoration: underline;">0.092</td>
+            <td style="text-decoration: underline;">0.052</td>
+            <td>0.155</td>
+            <td style="text-decoration: underline;">0.091</td>
+            <td>0.562</td>
+            <td>0.966</td>
+            <td>0.097</td>
+        </tr>
+        <tr>
+            <td>Mathpix</td>
+            <td style="text-decoration: underline;">0.033</td>
+            <td>0.240</td>
+            <td>0.261</td>
+            <td>0.185</td>
+            <td>0.121</td>
+            <td>0.166</td>
+            <td>0.180</td>
+            <td style="text-decoration: underline;">0.038</td>
+            <td><strong>0.185</strong></td>
+            <td>0.638</td>
+        </tr>
+        <tr>
+            <td rowspan="3">Vision Language Models</td>
+            <td>Qwen2-VL-72B</td>
+            <td>0.072</td>
+            <td>0.274</td>
+            <td>0.286</td>
+            <td>0.234</td>
+            <td>0.155</td>
+            <td style="text-decoration: underline;">0.148</td>
+            <td>0.223</td>
+            <td>0.273</td>
+            <td>0.721</td>
+            <td style="text-decoration: underline;">0.067</td>
+        </tr>
+        <tr>
+            <td>InternVL2-Llama3-76B</td>
+            <td>0.074</td>
+            <td>0.155</td>
+            <td>0.242</td>
+            <td>0.113</td>
+            <td>0.352</td>
+            <td>0.269</td>
+            <td>0.132</td>
+            <td>0.610</td>
+            <td>0.907</td>
+            <td>0.595</td>
+        </tr>
+        <tr>
+            <td>GPT4o</td>
+            <td><strong>0.020</strong></td>
+            <td>0.224</td>
+            <td style="text-decoration: underline;">0.125</td>
+            <td>0.167</td>
+            <td>0.140</td>
+            <td>0.220</td>
+            <td>0.168</td>
+            <td>0.115</td>
+            <td>0.718</td>
+            <td>0.132</td>
+        </tr>
+    </tbody>
 </table>
+
 
 OCR text recognition evaluation can be configured according to [ocr](./configs/ocr.yaml). 
 
 <details>
-  <summary>【The field explanation of ocr.yaml】</summary>
+  <summary>The field explanation of ocr.yaml</summary>
 
 The configuration file for `ocr.yaml` is as follows:
 
@@ -1250,8 +965,8 @@ with open('./demo_data/recognition/OmniDocBench_demo_text_ocr.json', 'w', encodi
 
 OmniDocBench contains bounding box information for tables on each PDF page along with corresponding table recognition annotations, making it suitable as a benchmark for table recognition evaluation. The table annotations are available in both HTML and LaTeX formats, with this repository currently providing examples for HTML format evaluation.
 
-<table style="width: 100%; margin: auto; border-collapse: collapse; font-size: small;">
-  <thead>
+<table style="width:100%; border-collapse: collapse;">
+<thead>
     <tr>
       <th rowspan="2">Model Type</th>
       <th rowspan="2">Model</th>
@@ -1276,58 +991,58 @@ OmniDocBench contains bounding box information for tables on each PDF page along
   </thead>
   <tbody>
     <tr>
-      <td rowspan="2" style="text-align: center;">OCR-based Models</td>
+      <td rowspan="2"><strong>OCR-based Models</strong></td>
       <td>PaddleOCR</td>
-      <td>76.8</td>
+      <td><u>76.8</u></td>
       <td>71.8</td>
       <td>80.1</td>
       <td>67.9</td>
-      <td>74.3</td>
-      <td>81.1</td>
+      <td><u>74.3</u></td>
+      <td><u>81.1</u></td>
       <td>74.5</td>
-      <td>70.6/75.2</td>
-      <td>71.3/74.1</td>
-      <td>72.7/74.0</td>
+      <td><u>70.6/75.2</u></td>
+      <td><u>71.3/74.1</u></td>
+      <td><u>72.7/74.0</u></td>
       <td>23.3/74.6</td>
       <td>73.6</td>
     </tr>
     <tr>
       <td>RapidTable</td>
-      <td>80.0</td>
-      <td>83.2</td>
-      <td>91.2</td>
-      <td>83.0</td>
-      <td>79.7</td>
-      <td>83.4</td>
+      <td><strong>80.0</strong></td>
+      <td><strong>83.2</strong></td>
+      <td><strong>91.2</strong></td>
+      <td><strong>83.0</strong></td>
+      <td><strong>79.7</strong></td>
+      <td><strong>83.4</strong></td>
       <td>78.4</td>
-      <td>77.1/85.4</td>
-      <td>76.7/83.9</td>
-      <td>77.6/84.9</td>
-      <td>25.2/83.7</td>
-      <td>82.5</td>
+      <td><strong>77.1/85.4</strong></td>
+      <td><strong>76.7/83.9</strong></td>
+      <td><strong>77.6/84.9</strong></td>
+      <td><u>25.2/83.7</u></td>
+      <td><strong>82.5</strong></td>
     </tr>
     <tr>
-      <td rowspan="2" style="text-align: center;">Expert VLMs</td>
+      <td rowspan="2"><strong>Expert VLMs</strong></td>
       <td>StructEqTable</td>
-      <td>72.8</td>
-      <td>75.9</td>
-      <td>83.4</td>
-      <td>72.9</td>
-      <td>76.2</td>
-      <td>76.9</td>
-      <td>88</td>
-      <td>64.5/81</td>
-      <td>69.2/76.6</td>
-      <td>72.8/76.4</td>
-      <td>30.5/76.2</td>
-      <td>75.8</td>
+      <td>72.0</td>
+      <td>72.6</td>
+      <td>81.7</td>
+      <td>68.8</td>
+      <td>64.3</td>
+      <td>80.7</td>
+      <td><strong>85.0</strong></td>
+      <td>65.1/76.8</td>
+      <td>69.4/73.5</td>
+      <td>66.8/75.7</td>
+      <td><strong>44.1/73.3</strong></td>
+      <td>72.7</td>
     </tr>
     <tr>
       <td>GOT-OCR</td>
       <td>72.2</td>
-      <td>75.5</td>
-      <td>85.4</td>
-      <td>73.1</td>
+      <td><u>75.5</u></td>
+      <td><u>85.4</u></td>
+      <td><u>73.1</u></td>
       <td>72.7</td>
       <td>78.2</td>
       <td>75.7</td>
@@ -1335,10 +1050,10 @@ OmniDocBench contains bounding box information for tables on each PDF page along
       <td>64.3/77.3</td>
       <td>70.8/76.9</td>
       <td>8.5/76.3</td>
-      <td>74.9</td>
+      <td><u>74.9</u></td>
     </tr>
     <tr>
-      <td rowspan="2" style="text-align: center;">General VLMs</td>
+      <td rowspan="2"><strong>General VLMs</strong></td>
       <td>Qwen2-VL-7B</td>
       <td>70.2</td>
       <td>70.7</td>
@@ -1346,7 +1061,7 @@ OmniDocBench contains bounding box information for tables on each PDF page along
       <td>70.2</td>
       <td>62.8</td>
       <td>74.5</td>
-      <td>80.3</td>
+      <td><u>80.3</u></td>
       <td>60.8/76.5</td>
       <td>63.8/72.6</td>
       <td>71.4/70.8</td>
@@ -1378,7 +1093,7 @@ Table recognition evaluation can be configured according to [table_recognition](
 **For tables predicted to be in LaTeX format, the [latexml](https://math.nist.gov/~BMiller/LaTeXML/) tool will be used to convert LaTeX to HTML before evaluation. The evaluation code will automatically perform format conversion, and users need to preinstall [latexml](https://math.nist.gov/~BMiller/LaTeXML/)**
 
 <details>
-  <summary>【The field explanation of table_recognition.yaml】</summary>
+  <summary>The field explanation of table_recognition.yaml</summary>
 
 The configuration file for `table_recognition.yaml` is as follows:
 
@@ -1480,126 +1195,84 @@ with open('./demo_data/recognition/OmniDocBench_demo_table.json', 'w', encoding=
 
 OmniDocBench contains bounding box information for all document components on each PDF page, making it suitable as a benchmark for layout detection task evaluation.
 
-<table style="width: 95%; margin: auto; border-collapse: collapse;">
+<table style="width: 90%; margin: auto; border-collapse: collapse;">
+  <caption>Component-level layout detection evaluation on OmniDocBench layout subset: mAP results by PDF page type.</caption>
   <thead>
     <tr>
-      <th>Model</th>
-      <th>Backbone</th>
-      <th>Params</th>
-      <th>Book</th>
-      <th>Slides</th>
-      <th>Research<br>Report</th>
-      <th>Textbook</th>
-      <th>Exam<br>Paper</th>
-      <th>Magazine</th>
-      <th>Academic<br>Literature</th>
-      <th>Notes</th>
-      <th>Newspaper</th>
-      <th>Average</th>
+      <th style="border-bottom: 2px solid black;">Model</th>
+      <th style="border-bottom: 2px solid black;">Book</th>
+      <th style="border-bottom: 2px solid black;">Slides</th>
+      <th style="border-bottom: 2px solid black;">Research Report</th>
+      <th style="border-bottom: 2px solid black;">Textbook</th>
+      <th style="border-bottom: 2px solid black;">Exam Paper</th>
+      <th style="border-bottom: 2px solid black;">Magazine</th>
+      <th style="border-bottom: 2px solid black;">Academic Literature</th>
+      <th style="border-bottom: 2px solid black;">Notes</th>
+      <th style="border-bottom: 2px solid black;">Newspaper</th>
+      <th style="border-bottom: 2px solid black;">Average mAP</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>DiT-L</sup></td>
-      <td>ViT-L</td>
-      <td>361.6M</td>
-      <td><u>43.44</u></td>
-      <td>13.72</td>
-      <td>45.85</td>
-      <td>15.45</td>
-      <td>3.40</td>
-      <td>29.23</td>
-      <td><strong>66.13</strong></td>
-      <td>0.21</td>
-      <td>23.65</td>
-      <td>26.90</td>
+      <td style="border-top: 1px solid black;">DiT-L</td>
+      <td style="border-top: 1px solid black; text-decoration: underline;">43.44</td>
+      <td style="border-top: 1px solid black; text-decoration: underline;">13.72</td>
+      <td style="border-top: 1px solid black; text-decoration: underline;">45.85</td>
+      <td style="border-top: 1px solid black;">15.45</td>
+      <td style="border-top: 1px solid black;">3.40</td>
+      <td style="border-top: 1px solid black; text-decoration: underline;">29.23</td>
+      <td style="border-top: 1px solid black; text-decoration: underline;">66.13</td>
+      <td style="border-top: 1px solid black;">0.21</td>
+      <td style="border-top: 1px solid black;">23.65</td>
+      <td style="border-top: 1px solid black;">26.90</td>
     </tr>
     <tr>
-      <td>LayoutLMv3</sup></td>
-      <td>RoBERTa-B</td>
-      <td>138.4M</td>
+      <td>LayoutLMv3</td>
       <td>42.12</td>
       <td>13.63</td>
       <td>43.22</td>
-      <td>21.00</td>
+      <td style="text-decoration: underline;">21.00</td>
       <td>5.48</td>
       <td>31.81</td>
-      <td><u>64.66</u></td>
+      <td>64.66</td>
       <td>0.80</td>
-      <td>30.84</td>
-      <td>28.84</td>
+      <td style="text-decoration: underline;">30.84</td>
+      <td style="text-decoration: underline;">28.84</td>
     </tr>
     <tr>
-      <td>DocLayout-YOLO</sup></td>
-      <td>v10m</td>
-      <td>19.6M</td>
-      <td><strong>43.71</strong></td>
-      <td><strong>48.71</strong></td>
-      <td><strong>72.83</strong></td>
-      <td><strong>42.67</strong></td>
-      <td><strong>35.40</strong></td>
-      <td><u>51.44</u></td>
-      <td><u>64.64</u></td>
-      <td><u>9.54</u></td>
-      <td><strong>57.54</strong></td>
-      <td><strong>47.38</strong></td>
-    </tr>
-    <tr>
-      <td>SwinDocSegmenter</sup></td>
-      <td>Swin-L</td>
-      <td>223M</td>
-      <td>42.91</td>
-      <td><u>28.20</u></td>
-      <td><u>47.29</u></td>
-      <td><u>32.44</u></td>
-      <td><u>20.81</u></td>
-      <td><strong>52.35</strong></td>
-      <td>48.54</td>
-      <td><strong>12.38</strong></td>
-      <td><u>38.06</u></td>
-      <td><u>35.89</u></td>
-    </tr>
-    <tr>
-      <td>GraphKD</sup></td>
-      <td>R101</td>
-      <td>44.5M</td>
-      <td>39.03</td>
-      <td>16.18</td>
-      <td>39.92</td>
-      <td>22.82</td>
-      <td>14.31</td>
-      <td>37.61</td>
-      <td>44.43</td>
-      <td>5.71</td>
-      <td>23.86</td>
-      <td>27.10</td>
-    </tr>
-    <tr>
-      <td>DOCX-Chain</sup></td>
-      <td>-</td>
-      <td>-</td>
+      <td>DOCX-Chain</td>
       <td>30.86</td>
       <td>11.71</td>
       <td>39.62</td>
-      <td>19.23</td>
-      <td>10.67</td>
+      <td style="text-decoration: underline;">19.23</td>
+      <td style="text-decoration: underline;">10.67</td>
       <td>23.00</td>
       <td>41.60</td>
-      <td>1.80</td>
+      <td style="text-decoration: underline;">1.80</td>
       <td>16.96</td>
       <td>21.27</td>
     </tr>
+    <tr>
+      <td style="font-weight: bold;">DocLayout-YOLO</td>
+      <td style="font-weight: bold;">43.71</td>
+      <td style="font-weight: bold;">48.71</td>
+      <td style="font-weight: bold;">72.83</td>
+      <td style="font-weight: bold;">42.67</td>
+      <td style="font-weight: bold;">35.40</td>
+      <td style="font-weight: bold;">51.44</td>
+      <td style="font-weight: bold;">66.84</td>
+      <td style="font-weight: bold;">9.54</td>
+      <td style="font-weight: bold;">57.54</td>
+      <td style="font-weight: bold;">48.71</td>
+    </tr>
   </tbody>
 </table>
-
-<p>Component-level layout detection evaluation on OmniDocBench layout subset: mAP results by PDF page type.</p>
-
 
 
 Layout detection config file reference [layout_detection](./configs/layout_detection.yaml), data format reference [detection_prediction](./demo_data/detection/detection_prediction.json).
 
 <details>
-  <summary>【The field explanation of layout_detection.yaml】</summary>
+  <summary>The field explanation of layout_detection.yaml</summary>
 
 Here is the configuration file for `layout_detection.yaml`:
 
@@ -1685,7 +1358,7 @@ OmniDocBench contains bounding box information for each formula on each PDF page
 The format for formula detection is essentially the same as layout detection. Formulas include both inline and display formulas. In this section, we provide a config example that can evaluate detection results for both display formulas and inline formulas simultaneously. Formula detection can be configured according to [formula_detection](./configs/formula_detection.yaml).
 
 <details>
-  <summary>【The field explanation of formula_detection.yaml】</summary>
+  <summary>The field explanation of formula_detection.yaml</summary>
 
 Here is the configuration file for `formula_detection.yaml`:
 
@@ -1724,290 +1397,11 @@ Please refer to the `Layout Detection` section for parameter explanations and da
 We provide several tools in the `tools` directory:
 - [json2md](./tools/json2md.py) for converting OmniDocBench from JSON format to Markdown format;
 - [visualization](./tools/visualization.py) for visualizing OmniDocBench JSON files;
-- [generate_result_tables](./tools/generate_result_tables.py) for generating the result leaderboard of the evaluation;
-- The [model_infer](./tools/model_infer) folder provides some model inference scripts for reference. Please use after configuring the model environment. Including:
-  - `<model_name>_img2md.py` for calling the models to convert images to Markdown format;
-  - `<model_name>_ocr.py` is to invoke the models for text recognition of block-level document text paragraphs;
-  - `<model_name>_formula.py` is used to call the models for formula recognition of display formulas (`equation_isolated`);
-
-## The evaluation model information
-
-### End2End
-<table>
-  <thead>
-    <tr>
-      <th>Model Name</th>
-      <th>Official Website</th>
-      <th>Evaluation Version/Model Weights</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>MinerU</td>
-      <td><a href="https://mineru.org.cn/">MinerU</a></td>
-      <td>0.9.3</td>
-    </tr>
-    <tr>
-      <td>Marker</td>
-      <td><a href="https://github.com/VikParuchuri/marker">Marker</a></td>
-      <td>1.2.3</td>
-    </tr>
-    <tr>
-      <td>Mathpix</td>
-      <td><a href="https://mathpix.com/">Mathpix</a></td>
-      <td>———</td>
-    </tr>
-    <tr>
-      <td>Pix2Text</td>
-      <td><a href="https://github.com/breezedeus/Pix2Text">Pix2Text</a></td>
-      <td>1.1.2.3</td>
-    </tr>
-    <tr>
-      <td>Unstructured</td>
-      <td><a href="https://github.com/Unstructured-IO/unstructured">Unstructured</a></td>
-      <td>0.16.23</td>
-    </tr>
-    <tr>
-      <td>OpenParse</td>
-      <td><a href="https://github.com/Filimoa/open-parse">OpenParse</a></td>
-      <td>0.7.0</td>
-    </tr>
-    <tr>
-      <td>Docling</td>
-      <td><a href="https://ds4sd.github.io/docling/">Docling</a></td>
-      <td>2.14.0</td>
-    </tr>
-    <tr>
-      <td>Mistral OCR</td>
-      <td><a href="https://mistral.ai/news/mistral-ocr?utm_source=ai-bot.cn">Mistral OCR</a></td>
-      <td>2503</td>
-    </tr>
-    <tr>
-      <td>GOT-OCR</td>
-      <td><a href="https://github.com/Ucas-HaoranWei/GOT-OCR2.0">GOT-OCR</a></td>
-      <td><a href="https://huggingface.co/stepfun-ai/GOT-OCR2_0">Hugging Face GOT-OCR2_0</a></td>
-    </tr>
-    <tr>
-      <td>Nougat</td>
-      <td><a href="https://github.com/facebookresearch/nougat">Nougat</a></td>
-      <td><a href="https://huggingface.co/docs/transformers/main/en/model_doc/nougat">Hugging Face Nougat base</a></td>
-    </tr>
-    <tr>
-      <td>olmOCR</td>
-      <td><a href="https://github.com/allenai/olmocr">olmOCR</a></td>
-      <td>Sglang</td>
-    </tr>
-    <tr>
-      <td>SmolDocling</td>
-      <td><a href="https://huggingface.co/ds4sd/SmolDocling-256M-preview">SmolDocling-256M-Preview-transformer</a></td>
-      <td>256M-Preview-transformer</td>
-    </tr>
-    <tr>
-      <td>GPT4o</td>
-      <td><a href="https://openai.com/index/hello-gpt-4o/">OpenAI GPT4o</a></td>
-      <td>2024-08-06</td>
-    </tr>
-    <tr>
-      <td>Gemini2.0-flash</td>
-      <td><a href="https://deepmind.google/technologies/gemini/flash/">Gemini2.0-flash</a></td>
-      <td>-</td>
-    </tr>
-    <tr>
-      <td>Gemini2.5-pro-exp-0325</td>
-      <td><a href="https://deepmind.google/technologies/gemini/pro/">Gemini2.5-pro-exp-0325</a></td>
-      <td>2025-03-25</td>
-    </tr>
-    <tr>
-      <td>Qwen2-VL-72B</td>
-      <td><a href="https://qwenlm.github.io/zh/blog/qwen2-vl/">Qwen2-VL</a></td>
-      <td><a href="https://huggingface.co/Qwen/Qwen2-VL-72B-Instruct">Hugging Face Qwen2-VL-72B-Instruct</a>
-      </td>
-    <tr>
-      <td>Qwen2.5-VL-72B</td>
-      <td><a href="https://github.com/QwenLM/Qwen2.5">Qwen2.5-VL</a></td>
-      <td><a href="https://huggingface.co/Qwen/Qwen2.5-VL-72B-Instruct">Hugging Face Qwen2.5-VL-72B-Instruct</a>    </td>
-    </tr>
-    <tr>
-      <td>InternVL2-Llama3-76B</td>
-      <td><a href="https://github.com/OpenGVLab/InternVL">InternVL</a></td>
-      <td><a href="https://huggingface.co/OpenGVLab/InternVL2-Llama3-76B">Hugging Face InternVL2-Llama3-76B</a></td>
-    </tr>
-  </tbody>
-</table>
-
-### Text Recognition
-
-<table>
-  <thead>
-    <tr>
-      <th>Model Name</th>
-      <th>Official Website</th>
-      <th>Evaluation Version/Model Weights</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>PaddleOCR</td>
-      <td><a href="https://www.paddlepaddle.org.cn/hub/scene/ocr">PaddlePaddle OCR</a></td>
-      <td>2.9.1</td>
-    </tr>
-    <tr>
-      <td>Tesseract</td>
-      <td><a href="https://tesseract-ocr.github.io/tessdoc/">Tesseract OCR</a></td>
-      <td>5.5</td>
-    </tr>
-    <tr>
-      <td>OpenOCR</td>
-      <td><a href="https://github.com/Topdu/OpenOCR">OpenOCR GitHub</a></td>
-      <td>0.0.6</td>
-    </tr>
-    <tr>
-      <td>EasyOCR</td>
-      <td><a href="https://www.easyproject.cn/easyocr/">EasyOCR</a></td>
-      <td>1.7.2</td>
-    </tr>
-    <tr>
-      <td>Surya</td>
-      <td><a href="https://github.com/VikParuchuri/surya">Surya GitHub</a></td>
-      <td>0.5.0</td>
-    </tr>
-  </tbody>
-</table>
-
-### Layout
-
-<table>
-  <thead>
-    <tr>
-      <th>Model Name</th>
-      <th>Official Website</th>
-      <th>Evaluation Version/Model Weights</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>DiT-L</td>
-      <td><a href="https://github.com/facebookresearch/DiT">DiT-L</a></td>
-      <td><a href="https://huggingface.co/docs/transformers/model_doc/dit">Hugging Face DiT</a></td>
-    </tr>
-    <tr>
-      <td>LayoutMv3</td>
-      <td><a href="https://github.com/microsoft/unilm/tree/master/layoutlmv3">LayoutMv3</a></td>
-      <td><a href="https://huggingface.co/docs/transformers/model_doc/layoutlmv3">Hugging Face LayoutMv3</a></td>
-    </tr>
-    <tr>
-      <td>DOCX-Chain</td>
-      <td><a href="https://github.com/AlibabaResearch/AdvancedLiterateMachinery/tree/main/Applications/DocXChain">DOCX-Chain</a></td>
-      <td><a href="https://github.com/AlibabaResearch/AdvancedLiterateMachinery/releases/download/v1.2.0-docX-release/DocXLayout_231012.pth">DocXLayout_231012.pth</a></td>
-    </tr>
-    <tr>
-      <td>DocLayout-YOLO</td>
-      <td><a href="https://github.com/opendatalab/DocLayout-YOLO">DocLayout-YOLO</a></td>
-      <td><a href="https://huggingface.co/spaces/opendatalab/DocLayout-YOLO">Hugging Face DocLayout-YOLO</a></td>
-    </tr>
-    <tr>
-      <td>SwinDocSegmenter</td>
-      <td><a href="https://github.com/ayanban011/SwinDocSegmenter">SwinDocSegmenter</a></td>
-      <td><a href="https://drive.google.com/file/d/1DCxG2MCza_z-yB3bLcaVvVR4Jik00Ecq/view?usp=share_link">model weights</a></td>
-    </tr>
-    <tr>
-      <td>GraphKD</td>
-      <td><a href="https://github.com/ayanban011/GraphKD">GraphKD</a></td>
-      <td><a href="https://drive.google.com/file/d/1oOzy7D6J0yb0Z_ALwpPZMbIZf_AmekvE/view?usp=sharing">model weights</a></td>
-    </tr>
-  </tbody>
-</table>
-
-### Formula
-<table>
-  <thead>
-    <tr>
-      <th>Model Name</th>
-      <th>Official Website</th>
-      <th>Evaluation Version/Model Weights</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GOT_OCR</td>
-      <td><a href="https://github.com/Ucas-HaoranWei/GOT-OCR2.0">GOT_OCR</a></td>
-      <td><a href="https://huggingface.co/stepfun-ai/GOT-OCR2_0">Hugging Face GOT-OCR2_0</a></td>
-    </tr>
-    <tr>
-      <td>Mathpix</td>
-      <td><a href="https://mathpix.com/">Mathpix</a></td>
-      <td>———</td>
-    </tr>
-    <tr>
-      <td>Pix2Tex</td>
-      <td><a href="https://github.com/lukas-blecher/LaTeX-OCR">Pix2Tex</a></td>
-      <td>0.1.2</td>
-    </tr>
-    <tr>
-      <td>UniMERNet-B</td>
-      <td><a href="https://github.com/opendatalab/UniMERNet">UniMERNet-B</a></td>
-      <td><a href="https://huggingface.co/datasets/wanderkid/UniMER_Dataset">Hugging Face UniMERNet-B</a></td>
-    </tr>
-    <tr>
-      <td>GPT4o</td>
-      <td><a href="https://openai.com/index/hello-gpt-4o/">GPT4o</a></td>
-      <td>2024-08-06</td>
-    </tr>
-    <tr>
-      <td>InternVL2-Llama3-76B</td>
-      <td><a href="https://github.com/OpenGVLab/InternVL">InternVL2-Llama3-76B</a></td>
-      <td><a href="https://huggingface.co/OpenGVLab/InternVL2-Llama3-76B">Huggingface Face InternVL2-Llama3-76B</a></td>
-    </tr>
-    <tr>
-      <td>Qwen2-VL-72B</td>
-      <td><a href="https://qwenlm.github.io/zh/blog/qwen2-vl/">Qwen2-VL-72B</a></td>
-      <td><a href="https://huggingface.co/Qwen/Qwen2-VL-72B-Instruct">Hugging Face Qwen2-VL-72B-Instruct</a></td>
-    </tr>
-  </tbody>
-</table>
-
-### Table
-<table>
-  <thead>
-    <tr>
-      <th>Model Name</th>
-      <th>Official Website</th>
-      <th>Evaluation Version/Model Weights</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>PaddleOCR</td>
-      <td><a href="https://github.com/PaddlePaddle/PaddleOCR">PaddleOCR</a></td>
-      <td><a href="https://paddlepaddle.github.io/PaddleOCR/latest/model/index.html">PaddleOCR</a></td>
-    </tr>
-    <tr>
-      <td>RapidTable</td>
-      <td><a href="https://github.com/RapidAI/RapidTable">RapidTable</a></td>
-      <td><a href="https://www.modelscope.cn/models/RapidAI/RapidTable/files">ModelScope RapidTable</a></td>
-    </tr>
-    <tr>
-      <td>StructEqTable</td>
-      <td><a href="https://github.com/Alpha-Innovator/StructEqTable-Deploy/blob/main/README.md">StructEqTable</a></td>
-      <td><a href="https://huggingface.co/U4R/StructTable-base">Hugging Face StructEqTable</a></td>
-    </tr>
-    <tr>
-      <td>GOT-OCR</td>
-      <td><a href="https://github.com/Ucas-HaoranWei/GOT-OCR2.0">GOT-OCR</a></td>
-      <td><a href="https://huggingface.co/stepfun-ai/GOT-OCR2_0">Hugging Face GOT-OCR</a></td>
-    </tr>
-    <tr>
-      <td>Qwen2-VL-7B</td>
-      <td><a href="https://github.com/QwenLM/Qwen2-VL">Qwen2-VL-7B</a></td>
-      <td><a href="https://huggingface.co/Qwen/Qwen2-VL-7B-Instruct">Hugging Face Qwen2-VL-7B-Instruct</a></td>
-    </tr>
-    <tr>
-      <td>InternVL2-8B</td>
-      <td><a href="https://github.com/OpenGVLab/InternVL">InternVL2-8B</a></td>
-      <td><a href="https://huggingface.co/OpenGVLab/InternVL2-8B">Hugging Face InternVL2-8B</a></td>
-    </tr>
-  </tbody>
-</table>
+- The [model_infer](./tools/model_infer) folder provides some model inference scripts for reference, including:
+  - [mathpix_img2md.py](./tools/model_infer/mathpix_img2md.py) for calling [mathpix](https://mathpix.com/) API to convert images to Markdown format;
+  - [internvl2_test_img2md.py](./tools/model_infer/internvl2_test_img2md.py) for using [InternVL2](https://github.com/OpenGVLab/InternVL) model to convert images to Markdown format, please use after configuring the InternVL2 model environment;
+  - [GOT_img2md.py](./tools/model_infer/GOT_img2md.py) for using [GOT-OCR](https://github.com/Ucas-HaoranWei/GOT-OCR2.0) model to convert images to Markdown format, please use after configuring the GOT-OCR model environment;
+  - [Qwen2VL_img2md.py](./tools/model_infer/Qwen2VL_img2md.py) for using [QwenVL](https://github.com/QwenLM/Qwen2-VL) model to convert images to Markdown format, please use after configuring the QwenVL model environment;
 
 ## TODO
 

@@ -1,0 +1,5 @@
+Hence [K]∗S∗S∗O ∈ C1 = d(t, v) + 1 = dt(S, S∗) −
+dt(C, S∗) + 1, and we have for the L−distance
+dt(C, S∗) + 1, and we have for the L−distance
+dt(C, S∗) −
+dt(C, S∗) = [C1 + [S∗S∗S∗L−2 [S∗S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S∗S∗L−2 [S
